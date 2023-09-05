@@ -1,7 +1,7 @@
 body{
     background: #F1F5F2;
     padding: 25px 0;
-    margin: auto;
+    width: 100%;
     height: 100%;
     overflow: hidden;
     font-family: Poppins, Helvetica, Arial, sans-serif;
@@ -19,6 +19,7 @@ body{
   top: 2vh;
   right: 1vw;
 }
+
 .icons{
   margin: auto 10px;
   display: inline-block;
@@ -45,7 +46,6 @@ fa-moon{
   display: inline-block;
   width: 60px;
   height: 34px;
-
 }
 
 /* Hide default HTML checkbox */
@@ -112,13 +112,13 @@ input:checked + .slider:before {
  /* Timer */
 
 .timer-container{
-    margin: 20px auto;
-    width: 550px;
-    height: 80%;
+    margin: 0 auto;
+    width: 100vw;
+    max-width: 550px;
+
     position: relative;
     text-align: center;
     font-weight: bold;
-    margin: auto;
 }
 
 .clock{
@@ -142,7 +142,7 @@ input:checked + .slider:before {
     margin: 0 auto;
     display: flexbox;
     align-items: center;
-    width: 100%;
+    width: 90%;
 }
 
 #tomato-fill {
@@ -183,17 +183,17 @@ input:checked + .slider:before {
     transform: translate(-50%, -50%); 
     background-color: transparent;
     padding: 20px;
-    height: 400px;
-    width: 400px;
-    border-radius: 50%;
     justify-content: center;
-    /* box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);; */
+    width: 100%;
+    height: 100%;
+
 }
 
 .tomato{
   position: absolute;
   top: -10px;
   filter: drop-shadow(0px 5px 2px rgb(0 0 0 / 0.2));
+  
 }
 
 
@@ -212,6 +212,7 @@ input:checked + .slider:before {
 
 .buttons button {
     background: #477446;
+    margin: 0.5em;
     border: none;
     border-radius: 12px;
     padding: 0;
@@ -256,6 +257,7 @@ input:checked + .slider:before {
     width: 500px;
     height: 250px;
     position: absolute;
+    bottom: 20px;
     right: 0;
     left: 0;
     background-color: #5B8C5A;
@@ -263,7 +265,7 @@ input:checked + .slider:before {
     display: flex;
     margin: 0 auto;
     justify-content: center;
-    transform: translateY(-100px);
+    /* transform: translateY(-100px); */
     transition: transform 0.5s;
     transition-timing-function: ease-in-out;
     overflow: hidden;
@@ -298,7 +300,7 @@ input:checked + .slider:before {
 }
 
 .hide{
-    transform: translateY(110px);
+    transform: translateY(calc(220px));
     
 }
 
@@ -333,6 +335,7 @@ input:checked ~ .task-text {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+
   }
 
   /* Hide the browser's default checkbox */
@@ -341,6 +344,7 @@ input:checked ~ .task-text {
     opacity: 0;
     height: 0;
     width: 0;
+   
   }
 
   /* Create a custom checkbox */
@@ -351,6 +355,11 @@ input:checked ~ .task-text {
     height: 25px;
     width: 25px;
     background-color: #eee;
+  }
+
+  .task-text-container{
+    border-bottom: solid rgb(232, 232, 232);
+    min-height: 25px;
   }
   
   /* On mouse-over, add a grey background color */
@@ -397,69 +406,34 @@ input:checked ~ .task-text {
 
   /* -----media queries----- */
   @media only screen and (max-width: 600px) {
+
     .switch-container{
       top: 2vh;
     }
 
     .timer-container{
-      width: 100vw;
+      min-width: none;
       position: absolute;
-      top: 15%;
+      top: 5%;
+      margin: auto;
+      left: 0;
     }
 
     .tomato{
-      width: 60vw;
+     width: 60vw; 
     }
 
     .timer{
-      font-size: 4em;
+      font-size: 15vw;
     }
 
     .task-list-container{
       width: 90vw;
-      position: absolute;
-      bottom: 0 ;
-      transform: translateY(-3vh);
     }
 
-    .hide{
-      transform: translateY(22vh);
-      
-  }
   }
 
-  @media only screen and (max-width: 850px) {
 
-    .task-list-container{
-      width: 90vw;
-      position: absolute;
-      bottom: 0 ;
-      transform: translateY(-3vh);
-    }
-
-    .hide{
-      transform: translateY(15vh);
-
-    }
-
-    .timer-container{
-      width: 80vw;
-      position: absolute;
-      top: 10%;
-      left: 0;
-      right: 0;
-    }
-
-    .tomato{
-      width: 40vw;
-    }
-
-    .buttons button {
-      width: 155px;
-  }
-    
-
-  }
 
 
 

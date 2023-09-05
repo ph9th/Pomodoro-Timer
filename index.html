@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1.0, user-scalable=0">
     <title>Study Timer</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://kit.fontawesome.com/98fd7ffeba.js" crossorigin="anonymous"></script>
@@ -10,10 +10,10 @@
 </head>
 <body>
     
-    <div class="switch-container">
+    <div class="switch-container" >
         <i id="sun" class="fa-solid fa-sun icons"></i>
-        <label class="switch" >
-            <input type="checkbox" onclick="toggleMode()">
+        <label class="switch">
+            <input id="mode" type="checkbox" onclick="toggleMode()">
             <span class="slider round" ></span>
           </label>
           <i id="moon" class="fa-solid fa-moon icons"></i>
@@ -55,16 +55,17 @@
        
         <!-- Control buttons -->
         <div class="buttons">
-            <button id="btn-reset">
-                <span class="btn-front" id="btn-front-reset">
-                Reset
-                </span>
-            </button>
             <button id="btn-start">
                 <span class="btn-front" id="btn-front-start">
                     Start
                 </span>
             </button>
+            <button id="btn-reset">
+                <span class="btn-front" id="btn-front-reset">
+                    Reset
+                </span>
+            </button>
+            
         </div>
         
         
@@ -84,35 +85,42 @@
         </div>
         <!-- Task list with 4 editable rows and checkboxes to cross out task-->
         <div class="task-list">
-
             <ul id="task-ul">
                 <li class="task">
                     <label onclick="toggleTextDecoration(this)">
-                        <input class="li-checkbox" id="task2" type="checkbox" unchecked>
+                        <input class="li-checkbox" id="task1" type="checkbox" unchecked>
                         <span class="checkmark" ></span> 
                     </label>
-                        <span class="task-text" contenteditable="true">study</span>
+                        <div class="task-text-container"><span class="task-text" contenteditable="true">task 1
+                        </span></div>
+                        
                 </li>
                 <li class="task" >
                     <label onclick="toggleTextDecoration(this)">
                         <input class="li-checkbox" id="task2" type="checkbox" unchecked>
                         <span class="checkmark" ></span> 
                     </label>
+                    <div class="task-text-container">
                         <span class="task-text" contenteditable="true">...</span>
+                    </div>
                 </li>
                 <li class="task">
                     <label onclick="toggleTextDecoration(this)">
                         <input class="li-checkbox" id="task3" type="checkbox" unchecked>
                         <span class="checkmark"></span> 
                     </label>
-                        <span class="task-text" contenteditable="true">...</span>        
+                    <div class="task-text-container">
+                        <span class="task-text" contenteditable="true">...</span>
+                    </div>
                 </li>
                 <li class="task">
                     <label onclick="toggleTextDecoration(this)">
-                        <input class="li-checkbox" id="task3" type="checkbox" unchecked>
+                        <input class="li-checkbox" id="task4" type="checkbox" unchecked>
                         <span class="checkmark"></span> 
                     </label>
-                        <span class="task-text" contenteditable="true">...</span>        
+                    <div class="task-text-container">
+                        <span class="task-text" contenteditable="true">...</span>
+                    </div>      
                 </li>
             </ul>
         </div>
