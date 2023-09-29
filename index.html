@@ -1,131 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1.0, user-scalable=0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1.0, user-scalable=0" />
     <title>Study Timer</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://kit.fontawesome.com/98fd7ffeba.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
+
 <body>
-    
-    <div class="switch-container" >
+    <div class="switch-container">
         <i id="sun" class="fa-solid fa-sun icons"></i>
         <label class="switch">
-            <input id="mode" type="checkbox" onclick="toggleMode()">
-            <span class="slider round" ></span>
-          </label>
-          <i id="moon" class="fa-solid fa-moon icons"></i>
-          
+            <input id="mode" type="checkbox" onclick="toggleMode()" />
+            <span class="slider round"></span>
+        </label>
+        <i id="moon" class="fa-solid fa-moon icons"></i>
     </div>
-    
+
     <div class="timer-container">
         <div class="clock">
             <div class="shapes">
                 <svg viewBox="0 0 300 300">
                     <path id="curve" d="M115,115 L115,5 A110,110 1 0,1 225,115 z"></path>
-                    <circle class="circle" cx="50%" cy="50%" r="120" ></circle>
+                    <circle class="circle" cx="50%" cy="50%" r="120"></circle>
                     <!-- <circle id="curve2" cx="50%" cy="50%" r="115" ></circle> -->
                     <text id="sessionText" width="400" fill="#14281D">
-                        <textPath id="sessionTextPath" xlink:href="#curve" startOffset="50%" dominant-baseline="middle" text-anchor="middle">
+                        <textPath id="sessionTextPath" xlink:href="#curve" startOffset="50%" dominant-baseline="middle"
+                            text-anchor="middle">
                             Focus
                         </textPath>
                     </text>
-        
+
                     <div class="tomato-container">
-                        <svg class="tomato" width="300px" height="100%" viewBox="0 0 356 344" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path id="tomato-fill" d="M355.5 194C355.5 285.679 264.179 343.5 172.5 343.5C80.8205 343.5 0 285.679 0 194C0 117.5 29.6458 83.7102 86.9998 57.9999C145 32 146.86 58.3861 172.5 57.9999C198.139 57.6138 226.036 43.1502 258 52.9999C333 76.1114 355.5 127.884 355.5 194Z" fill="#DB3A34"/>
-                            <path id="highlight" d="M62.384 131.563C67.8839 120.063 79.3839 110.813 89.884 110.063C103.884 109.063 105.383 121.303 89.884 133.5C74 146 79.8178 150.372 69.3841 156.063C58.384 162.063 56.2481 144.393 62.384 131.563Z" fill="white" opacity="40%"/>
-                            <path d="M175.053 46.2386C175.513 44.2191 179.471 31.0949 205 28.0002C221.5 26 231 38.5335 231 38.5335C231 38.5335 224.5 36.5142 209.5 38.5335C196.353 40.3033 193.02 46.4999 193.02 46.4999C193.02 46.4999 204.354 44.5114 219.959 46.4999C239.422 48.9801 258 36.5142 258 36.5142C258 36.5142 255.78 47.1908 239.5 54.5002C229.47 59.0035 211.27 61.1587 197.645 59.4844C206.597 62.2053 222.932 69.3835 236.122 85.4999C254.827 108.353 247.5 131 247.5 131C247.5 131 235.064 115.9 219.959 96.4205C204.855 76.9413 200 85.5 180.5 70.5C176.616 67.5121 184.959 63.8819 156 96.4205C139.375 115.101 129.714 157 129.714 157C129.714 157 114.562 124.33 122.306 96.4205C139.13 63.8819 160.5 64 160.5 64C160.5 64 150.592 59.3998 122.306 68.8233C95.6518 77.7032 74.5 91.0355 74.5 91.0355C74.5 91.0355 77.8571 63.8819 112.204 52.4391C118.495 50.3433 137.5 44.5001 164.5 52.4391C163.917 51.754 163.253 51.1092 162.507 50.4804C161.082 49.3432 159.159 48.0445 157.379 46.9043C155.911 45.9903 154.284 45.017 152.5 43.9184C143 38.4184 100.465 46.4576 97 43.9184C104.285 43.4387 140 17.5001 168.5 38.5335C173.09 43.645 174.618 45.5592 175.053 46.2386Z" fill="#276030"/>
-                            <path d="M177.703 24.2786C180.151 14.3548 187.108 2.00007 187.108 2.00007C187.108 2.00007 190.243 -0.5 195.5 2.00007C199.791 4.041 202 6.87349 202 6.87349C202 6.87349 198.081 5.59104 190.243 24.2786C182.405 42.9661 183.973 57.0001 183.973 57.0001C183.973 57.0001 183 58.1346 178 57.5001C173 56.8656 173 55.6077 173 55.6077C173 55.6077 175.254 34.2023 177.703 24.2786Z" fill="#1E4F26"/>
-                            </svg>    
+                        <svg class="tomato" width="300px" height="100%" viewBox="0 0 356 344" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path id="tomato-fill"
+                                d="M355.5 194C355.5 285.679 264.179 343.5 172.5 343.5C80.8205 343.5 0 285.679 0 194C0 117.5 29.6458 83.7102 86.9998 57.9999C145 32 146.86 58.3861 172.5 57.9999C198.139 57.6138 226.036 43.1502 258 52.9999C333 76.1114 355.5 127.884 355.5 194Z"
+                                fill="#DB3A34" />
+                            <path id="highlight"
+                                d="M62.384 131.563C67.8839 120.063 79.3839 110.813 89.884 110.063C103.884 109.063 105.383 121.303 89.884 133.5C74 146 79.8178 150.372 69.3841 156.063C58.384 162.063 56.2481 144.393 62.384 131.563Z"
+                                fill="white" opacity="40%" />
+                            <path
+                                d="M175.053 46.2386C175.513 44.2191 179.471 31.0949 205 28.0002C221.5 26 231 38.5335 231 38.5335C231 38.5335 224.5 36.5142 209.5 38.5335C196.353 40.3033 193.02 46.4999 193.02 46.4999C193.02 46.4999 204.354 44.5114 219.959 46.4999C239.422 48.9801 258 36.5142 258 36.5142C258 36.5142 255.78 47.1908 239.5 54.5002C229.47 59.0035 211.27 61.1587 197.645 59.4844C206.597 62.2053 222.932 69.3835 236.122 85.4999C254.827 108.353 247.5 131 247.5 131C247.5 131 235.064 115.9 219.959 96.4205C204.855 76.9413 200 85.5 180.5 70.5C176.616 67.5121 184.959 63.8819 156 96.4205C139.375 115.101 129.714 157 129.714 157C129.714 157 114.562 124.33 122.306 96.4205C139.13 63.8819 160.5 64 160.5 64C160.5 64 150.592 59.3998 122.306 68.8233C95.6518 77.7032 74.5 91.0355 74.5 91.0355C74.5 91.0355 77.8571 63.8819 112.204 52.4391C118.495 50.3433 137.5 44.5001 164.5 52.4391C163.917 51.754 163.253 51.1092 162.507 50.4804C161.082 49.3432 159.159 48.0445 157.379 46.9043C155.911 45.9903 154.284 45.017 152.5 43.9184C143 38.4184 100.465 46.4576 97 43.9184C104.285 43.4387 140 17.5001 168.5 38.5335C173.09 43.645 174.618 45.5592 175.053 46.2386Z"
+                                fill="#276030" />
+                            <path
+                                d="M177.703 24.2786C180.151 14.3548 187.108 2.00007 187.108 2.00007C187.108 2.00007 190.243 -0.5 195.5 2.00007C199.791 4.041 202 6.87349 202 6.87349C202 6.87349 198.081 5.59104 190.243 24.2786C182.405 42.9661 183.973 57.0001 183.973 57.0001C183.973 57.0001 183 58.1346 178 57.5001C173 56.8656 173 55.6077 173 55.6077C173 55.6077 175.254 34.2023 177.703 24.2786Z"
+                                fill="#1E4F26" />
+                        </svg>
                     </div>
-                    
-                    <!-- <circle id="tomato" cx="50%" cy="50%" r="50"/> -->              
+
+                    <!-- <circle id="tomato" cx="50%" cy="50%" r="50"/> -->
                 </svg>
-                      
             </div>
             <!-- Timer Digits -->
-            <div class="timer">    
+            <div class="timer">
                 <p id="timer-text">0</p>
-
             </div>
         </div>
-       
+
         <!-- Control buttons -->
         <div class="buttons">
+            <button id="btn-settings" onclick="toggleSettings()">
+                <span><i class="fa-solid fa-gear"></i></span>
+            </button>
             <button id="btn-start">
-                <span class="btn-front" id="btn-front-start">
-                    Start
-                </span>
+                <span class="btn-front" id="btn-front-start"> Start </span>
             </button>
             <button id="btn-reset">
-                <span class="btn-front" id="btn-front-reset">
-                    Reset
+                <span class="" id="btn-front-reset">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
                 </span>
             </button>
-            
         </div>
-        
-        
     </div>
+
     <!-- Task List -->
     <div class="task-list-container">
         <div class="list-header">
             <span class="list-header-text" id="list-header-text-title">
-                Task:
+                Current Task:
             </span>
-            <span class="list-header-text" id="current-task">
-                ...
-            </span>
+            <span class="list-header-text" id="current-task"> ... </span>
 
-            <button class="btn-toggle"><i class="fa-solid fa-angle-down" id="toggle-icon"></i></button>
-            
+            <button class="btn-toggle">
+                <i class="fa-solid fa-angle-down" id="toggle-icon"></i>
+            </button>
         </div>
-        <!-- Task list with 4 editable rows and checkboxes to cross out task-->
         <div class="task-list">
-            <ul id="task-ul">
-                <li class="task">
-                    <label onclick="toggleTextDecoration(this)">
-                        <input class="li-checkbox" id="task1" type="checkbox" unchecked>
-                        <span class="checkmark" ></span> 
-                    </label>
-                        <div class="task-text-container"><span class="task-text" contenteditable="true">task 1
-                        </span></div>
-                        
-                </li>
-                <li class="task" >
-                    <label onclick="toggleTextDecoration(this)">
-                        <input class="li-checkbox" id="task2" type="checkbox" unchecked>
-                        <span class="checkmark" ></span> 
-                    </label>
-                    <div class="task-text-container">
-                        <span class="task-text" contenteditable="true">...</span>
-                    </div>
-                </li>
-                <li class="task">
-                    <label onclick="toggleTextDecoration(this)">
-                        <input class="li-checkbox" id="task3" type="checkbox" unchecked>
-                        <span class="checkmark"></span> 
-                    </label>
-                    <div class="task-text-container">
-                        <span class="task-text" contenteditable="true">...</span>
-                    </div>
-                </li>
-                <li class="task">
-                    <label onclick="toggleTextDecoration(this)">
-                        <input class="li-checkbox" id="task4" type="checkbox" unchecked>
-                        <span class="checkmark"></span> 
-                    </label>
-                    <div class="task-text-container">
-                        <span class="task-text" contenteditable="true">...</span>
-                    </div>      
-                </li>
-            </ul>
+            <!-- Task list with 4 editable rows and checkboxes to cross out task-->
+            <ul id="task-list"></ul>
         </div>
     </div>
-
+    <div class="settings-container" id="settings-container">
+        <div class="settings" id="settings">
+            <span class="settings-text">Set durations</span>
+            <button class="close" onclick="toggleSettings()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="settings-item">
+                <label for="timer" class="">Pomodoro</label>
+                <input id="pomodoro" type="number" min="1" step="1" class="" value="25" />
+            </div>
+            <div class="settings-item">
+                <label for="short-break" class="">Short Break</label>
+                <input id="short-break" type="number" min="0" step="1" class="" value="5" />
+            </div>
+            <div class="settings-item">
+                <label for="long-break" class="">Long Break</label>
+                <input id="long-break" type="number" min="0" step="1" class="" value="15" />
+            </div>
+            <button class="save" onclick="saveSettings()">Save</button>
+        </div>
+    </div>
     <script src="./main.js"></script>
 </body>
+
 </html>

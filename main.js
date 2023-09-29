@@ -1,288 +1,343 @@
-//buttons
-const startButton = document.querySelector('#btn-front-start');
-const resetButton = document.querySelector('#btn-front-reset');
-const toggleButton = document.querySelector('.btn-toggle');
- 
-//timer variables
-const timerText = document.querySelector('#timer-text'); 
-let startTime;
-let stopTime;
-let timerIsRunning = false;
-var timer;
-const TOTAL_TIME = 1500000;
-let remainingTime = 1500000; //1500000 ms = 25 min
-let currentDate = new Date(Date.now()); //keep track of time of day
-let currentHour = currentDate.getHours();
-let sessionType = 'focus';
-let sessionCount = 0;
+// Constants
+let TOTAL_TIME = 1_500_000 // 1500000 ms = 25 minutes
+let SHORT_BREAK_TIME = 300_000 // 5 minutes
+let LONG_BREAK_TIME = 900_000 // 15 minutes
 
-const SHORT_BREAK_TIME = 300000; //Short break time in ms; 5 min
-const LONG_BREAK_TIME = 900000; //Long break time in ms; 15 min
+// Get elements
+const startButton = document.querySelector('#btn-front-start')
+const resetButton = document.querySelector('#btn-front-reset')
+const toggleButton = document.querySelector('.btn-toggle')
+const timerText = document.querySelector('#timer-text') // displayed timer text
+const tomatoColor = document.getElementById('tomato-fill') // tomato color
 
+// Timer variables
+let startTime
+let stopTime
+let timerIsRunning = false
+let timer
+let remainingTime = TOTAL_TIME
+let currentDate = new Date() //keep track of time of day
+let currentHour = currentDate.getHours()
+let sessionType = 'focus'
+let sessionCount = 0
 
-//tomato color
-var tomatoColor = document.getElementById("tomato-fill");
-var colorTransition = document.querySelector(".color-transition");
+// Audio
+const bellSound = new Audio('./sounds/bell.mp3')
 
-
+// Update time of day every 10 minutes
 function updateTime() {
-    // check time of day every 10min
-    setInterval(() => {
-      currentDate = new Date(Date.now());
-      currentHour = currentDate.getHours();
-    }, 600000);
-  }
+  setInterval(() => {
+    currentDate = new Date()
+    currentHour = currentDate.getHours()
+  }, 600_000)
+}
 
+// Format time as HH:MM:SS
+function formatTime(milliseconds) {
+  const totalSeconds = Math.floor(milliseconds / 1000)
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+  return `${minutes.toString().padStart(2, '0')}:${seconds
+    .toString()
+    .padStart(2, '0')}`
+}
+
+// Start timer
 function startTimer(secondsLeft) {
-  console.log("start");
-  let bellSound = new Audio('./sounds/bell.mp3');
-    tomatoColor.classList.add("color-transition");
-    
-    let ms = secondsLeft * 1000;
-    startTime = new Date().getTime();
-    timerIsRunning = true;
-    startButton.innerHTML = 'Pause';
+  tomatoColor.classList.add('color-transition')
+  const ms = secondsLeft * 1000
+  startTime = new Date().getTime()
+  timerIsRunning = true
+  startButton.innerHTML = 'Pause'
 
-    timer = setInterval(() => {
-      remainingTime = Math.max(0, ms - (new Date().getTime()-startTime));
-      updateTimer();
-      
-      if(sessionType==='focus'){
-        //change color
-        if(remainingTime > TOTAL_TIME/2){
-          changeColor('yellow');
-        } else if(remainingTime < TOTAL_TIME/2){
-          changeColor('red');
-}
+  timer = setInterval(() => {
+    remainingTime = Math.max(0, ms - (new Date().getTime() - startTime))
+    updateTimer()
+
+    if (sessionType === 'focus') {
+      if (remainingTime > TOTAL_TIME / 2) {
+        changeColor('yellow')
+      } else if (remainingTime < TOTAL_TIME / 2) {
+        changeColor('red')
       }
-      
-      displayCurrentTask();
-      
-      //Stop Timer
-      //Switch session type
-      if(remainingTime <= 500) {
-          bellSound.play();
-          stopTime = new Date().getTime();
-          clearInterval(timer);
-          resumeTimer
-
-          if(sessionType === 'focus'){
-            sessionCount++;
-          }
-          switchSession();
-
-        }
-
-    }, 250);
-}
-
-function pauseTimer(){
-    console.log("pause");
-    if(timerIsRunning) {
-        clearInterval(timer);
-        startButton.innerHTML = 'Resume';
-        timerIsRunning = false;
-
-        var currColor = window.getComputedStyle(tomatoColor).getPropertyValue("fill");
-        tomatoColor.style.fill = currColor;
-   
-    }
-}
-
-function resumeTimer() {
-    console.log("resume");
-    if(!timerIsRunning) {
-      startTimer(remainingTime/1000);
-      startButton.innerHTML = 'Pause';
-      timerIsRunning = true;
-
-      tomatoColor.classList.add("color-transition");
     }
 
+    displayCurrentTask()
+
+    //Switch session type
+    if (remainingTime > 500) {
+      return
+    }
+    bellSound.play()
+    stopTime = new Date().getTime()
+    clearInterval(timer)
+
+    if (sessionType === 'focus') {
+      sessionCount++
+    }
+    switchSession()
+  }, 250)
+}
+
+// Pause timer
+function pauseTimer() {
+  if (!timerIsRunning) {
+    return
   }
+  clearInterval(timer)
+  startButton.innerHTML = 'Resume'
+  timerIsRunning = false
 
+  // const currColor = window.getComputedStyle(tomatoColor).getPropertyValue("fill");
+  // tomatoColor.style.fill = currColor;
+}
+
+// Resume timer
+function resumeTimer() {
+  if (timerIsRunning) {
+    return
+  }
+  startTimer(remainingTime / 1000)
+  startButton.innerHTML = 'Pause'
+  timerIsRunning = true
+  tomatoColor.classList.add('color-transition')
+}
+
+// Toggle between pause and resume
 function pauseOrResumeTimer() {
-    if(timerIsRunning === false) {
-    if(remainingTime === 0) {
-        startTimer(remainingTime/1000);
-    } else {
-        resumeTimer();
-    }
-    } else {
-    pauseTimer();
-    }
+  if (timerIsRunning) {
+    pauseTimer()
+  } else if (remainingTime === 0) {
+    startTimer(remainingTime / 1000)
+  } else {
+    resumeTimer()
+  }
 }
 
-const delay = ms => new Promise(res => setTimeout(res, ms));
-const delayResetTimer = async () => {
-  await delay(1000);
-  resetTimer();
-};
-
-function resetTimer(){
-    console.log("reset");
-    stopTime = new Date().getTime(); 
-    clearInterval(timer);
-    timerIsRunning = false;
-    remainingTime = TOTAL_TIME;
-    startButton.innerHTML = 'Start';
-    tomatoColor.classList.remove("color-transition");
-    changeColor('green');
-    sessionType = 'focus';
-    changeSessionText('focus');
-    updateTimer();
-    
+// Reset timer
+function resetTimer() {
+  stopTime = new Date().getTime()
+  clearInterval(timer)
+  timerIsRunning = false
+  remainingTime = TOTAL_TIME
+  startButton.innerHTML = 'Start'
+  tomatoColor.classList.remove('color-transition')
+  changeColor('green')
+  sessionType = 'focus'
+  changeSessionText('focus')
+  updateTimer()
 }
 
+// Update timer text
 function updateTimer() {
-    const secondsLeft = remainingTime/1000;
-    let hour = Math.floor((remainingTime/1000)/3600);
-    let min = parseInt((secondsLeft/60) % 60);
-    let seconds = Math.floor(secondsLeft % 60);
-    min = (min < 10 ? "0" : "") + min;
-    seconds = (seconds < 10 ? "0" : "") + seconds;
-    timerText.innerHTML = hour > 0 ? hour + ":" + min +":" + seconds : min +":" + seconds;
-    if(timerIsRunning) {
-        timerText.innerHTML = hour > 0 ? hour + ":" + min +":" + seconds : min +":" + seconds;
-    }
+  timerText.textContent = formatTime(remainingTime)
 }
 
-function changeSessionText(type){
-  document.getElementById("sessionTextPath").textContent = type;
+// Update session text
+function changeSessionText(type) {
+  document.getElementById('sessionTextPath').textContent = type
 }
 
 // Switch between focus and break session
-function switchSession(){
-  if(sessionType == 'focus'){
-    sessionType = 'break';
-    //Change session text
-    changeSessionText('break');
-    if(sessionCount % 4 == 0) {
-      remainingTime = LONG_BREAK_TIME;
-      sessionCount = 0;
+function switchSession() {
+  if (sessionType == 'focus') {
+    sessionType = 'break'
+    changeSessionText('break')
+    if (sessionCount % 4 == 0) {
+      remainingTime = LONG_BREAK_TIME
+      sessionCount = 0
     } else {
-      remainingTime = SHORT_BREAK_TIME;
+      remainingTime = SHORT_BREAK_TIME
     }
-  }
-  else if(sessionType == 'break'){
-    sessionType = 'focus';
-    //Change session text
-    changeSessionText('focus');
-    remainingTime = TOTAL_TIME;
-    changeColor('green');
+  } else if (sessionType == 'break') {
+    sessionType = 'focus'
+    changeSessionText('focus')
+    remainingTime = TOTAL_TIME
+    changeColor('green')
   }
 
-  setTimeout(function() {
-    startTimer(remainingTime/1000);
-  }, 2000);
-
-  
+  setTimeout(() => {
+    startTimer(remainingTime / 1000)
+  }, 2000)
 }
 
-// Start clock if button is pressed
+// Event listeners
 startButton.addEventListener('click', () => {
-    pauseOrResumeTimer();
-});
+  pauseOrResumeTimer()
+})
 
 resetButton.addEventListener('click', () => {
-    resetTimer();
-});
+  resetTimer()
+})
 
+toggleButton.addEventListener('click', () => {
+  const list = document.querySelector('.task-list-container')
+  list.classList.toggle('hide')
+  const icon = document.getElementById('toggle-icon')
+  icon.className = list.classList.contains('hide')
+    ? 'fa-solid fa-angle-up'
+    : 'fa-solid fa-angle-down'
+})
 
-window.addEventListener('load',updateTimer);
-window.addEventListener('load', updateTime);
-
+window.addEventListener('load', () => {
+  updateTimer()
+  updateTime()
+})
 
 // Task list functions
 
-function toggleList() {
-    var list = document.getElementsByClassName("task-list-container");
-    var icon = document.getElementById("toggle-icon");
-    list[0].classList.toggle("hide");
-    if(list[0].classList.contains("hide")){
-      icon.className = "fa-solid fa-angle-up";
-    }else {
-      icon.className = "fa-solid fa-angle-down";
-    };
-  };
-
-toggleButton.addEventListener('click', () => {
-    toggleList();
-});
-
-
-//change tomato color gradient
-
-function changeColor(timerState) {
-        //set duration
-  let remainingTimeChar;
-  switch(timerState){
-    case 'green':
-      tomatoColor.style.fill = '#5B8C5A';
-      break;
-    case 'yellow':
-      remainingTimeChar = String((remainingTime-(TOTAL_TIME/2))/1000) + "s";
-      $('.color-transition').css('transitionDuration', remainingTimeChar);
-
-      tomatoColor.style.fill = '#F7B23B';
-      break;
-    case 'red':
-      remainingTimeChar = String(remainingTime/1000 + "s");
-      $('.color-transition').css('transitionDuration', remainingTimeChar);
-
-      tomatoColor.style.fill = '#DB3A34';
-      break;
-    default:
-      tomatoColor.style.fill = '#DB3A34';
-      break;
-  }
-}
-
-
-function toggleTextDecoration(checkbox){
-  if(checkbox.childNodes[1].checked){
-    checkbox.nextElementSibling.classList.add('text-decoration');
-  }else {
-    checkbox.nextElementSibling.classList.remove('text-decoration');
-  }
-}
-
-//display current task
+// Display current task
 function displayCurrentTask() {
- 
-    var currTaskText = document.getElementById("current-task");
-    var ul = document.getElementById("task-ul");
-    var items = ul.getElementsByTagName("li");
-    for (let i = 0; i < items.length; i++) {
-      let itemCheckbox = items[i].getElementsByClassName("li-checkbox")[0];
-      let checked = itemCheckbox.checked;
+  const currTaskText = document.getElementById('current-task')
+  const ul = document.getElementById('task-list')
+  const items = ul.getElementsByTagName('li')
 
-      if(!checked){
-        currTaskText.innerHTML = items[i].getElementsByClassName("task-text")[0].innerHTML;
-        break;
-      };
+  for (const item of items) {
+    const itemCheckbox = item.querySelector('.li-checkbox')
+    const checked = itemCheckbox.checked
+    const taskText = item.querySelector('.task-text').textContent
+
+    if (!checked && taskText.trim() !== '') {
+      currTaskText.textContent = taskText
+      break
+    }
   }
 }
 
-function checkTasks(element){
-  var id = element.id;
+//Toggle tomato color based on time remaining
+function toggleColorTransition(timerState) {
+  let remainingTimeChar
 
-}
+  switch (timerState) {
+    case 'green':
+      tomatoColor.style.fill = '#5B8C5A'
+      break
+    case 'yellow':
+      remainingTimeChar = `${String((remainingTime - TOTAL_TIME / 2) / 1000)}s`
+      $('.color-transition').css('transitionDuration', remainingTimeChar)
 
-function crossTask(input){
-  if(input.checked){
+      tomatoColor.style.fill = '#F7B23B'
+      break
+    case 'red':
+      remainingTimeChar = String(`${remainingTime / 1000}s`)
+      $('.color-transition').css('transitionDuration', remainingTimeChar)
 
+      tomatoColor.style.fill = '#DB3A34'
+      break
+    default:
+      tomatoColor.style.fill = '#DB3A34'
+      break
   }
 }
 
-function toggleMode(){
-  
-  document.body.classList.toggle("dark-mode");
-  var moon = document.getElementById("moon");
-  moon.classList.toggle('moon-dark-mode');
-
-  var sessionText = document.getElementById("sessionText");
-  sessionText.classList.toggle('sessionText-dark-mode');
-
+// Initial UI setup
+function initializeUI() {
+  updateTimer()
+  updateTime()
+  changeColor('green')
+  changeSessionText('focus')
 }
 
+// Change tomato color gradient
+function changeColor(timerState) {
+  tomatoColor.style.transitionDuration = '0s'
+  toggleColorTransition(timerState)
+}
+
+// Toggle dark mode
+function toggleMode() {
+  document.body.classList.toggle('dark-mode')
+  const moon = document.getElementById('moon')
+  moon.classList.toggle('moon-dark-mode')
+
+  const sessionText = document.getElementById('sessionText')
+  sessionText.classList.toggle('sessionText-dark-mode')
+
+  const btn = document.getElementById('btn-reset')
+  btn.classList.toggle('btn-dark-mode')
+}
+
+initializeUI()
+
+function toggleTextDecoration(checkbox) {
+  if (checkbox.childNodes[1].checked) {
+    checkbox.nextElementSibling.classList.add('text-decoration')
+  } else {
+    checkbox.nextElementSibling.classList.remove('text-decoration')
+  }
+}
+
+class TaskItem {
+  constructor(text, isChecked = false) {
+    this.text = text
+    this.isChecked = isChecked
+  }
+
+  render() {
+    const li = document.createElement('li')
+    li.classList.add('task')
+    li.innerHTML = `
+      <label>
+        <input class="li-checkbox" type="checkbox" ${this.isChecked ? 'checked' : ''
+      }>
+        <span class="checkmark"></span>
+      </label>
+      <div class="task-text-container">
+        <span class="task-text" contenteditable="true" data-placeholder="Enter your task">${this.text
+      }</span>
+      </div>
+    `
+
+    const checkbox = li.querySelector('.li-checkbox')
+    const taskText = li.querySelector('.task-text')
+
+    checkbox.addEventListener('change', () => {
+      this.isChecked = checkbox.checked
+      taskText.classList.toggle('completed', this.isChecked)
+    })
+
+    taskText.addEventListener('input', () => {
+      this.text = taskText.textContent
+    })
+
+    taskText.addEventListener('keypress', evt => {
+      if (evt.which === 13) {
+        evt.preventDefault()
+      }
+    })
+
+    return li
+  }
+}
+
+function addTaskToList(text, isChecked = false) {
+  const taskItem = new TaskItem(text, isChecked)
+  const taskList = document.getElementById('task-list')
+  taskList.appendChild(taskItem.render())
+}
+
+addTaskToList('Task 1')
+addTaskToList('')
+addTaskToList('')
+addTaskToList('')
+
+function toggleSettings() {
+  const div = document.getElementById('settings')
+  div.classList.toggle('fade')
+  const outerDiv = document.querySelector('.settings-container')
+  outerDiv.classList.toggle('blur')
+  outerDiv.classList.toggle('fade')
+}
+
+function saveSettings() {
+  const pomodoro = document.getElementById('pomodoro')
+  TOTAL_TIME = pomodoro.value * 60_000
+  const shortBreak = document.getElementById('short-break')
+  SHORT_BREAK_TIME = shortBreak.value * 60_000
+  const longBreak = document.getElementById('long-break')
+  LONG_BREAK_TIME = longBreak.value * 60_000
+
+  resetTimer()
+
+  toggleSettings()
+}
