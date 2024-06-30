@@ -316,7 +316,7 @@ function addTaskToList(text, isChecked = false) {
   taskList.appendChild(taskItem.render())
 }
 
-addTaskToList('Task 1')
+addTaskToList('')
 addTaskToList('')
 addTaskToList('')
 addTaskToList('')
